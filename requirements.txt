@@ -1,0 +1,8 @@
+flask
+pylint
+pytest
+pytest-cov
+redis
+pycodestyle
+flake8
+flask
