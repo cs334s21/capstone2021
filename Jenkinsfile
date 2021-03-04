@@ -4,30 +4,12 @@ pipeline {
       image 'python:3.8'
     }
   }
-  stages {
-    stage('Create Virtual Environment') {
-      steps {
-        sh '''
-          python3 -m venv .venv
-          . .venv/bin/activate
-          pip install -e .
-        '''
-      }
-    }
 
-    stage('Unit Tests') {
+  stages {
+    stage('Hello World') {
       steps {
         sh '''
-          . .venv/bin/activate
-          pytest
-        '''
-      }
-    }
-    stage('Static Analysis') {
-      steps {
-        sh '''
-          . .venv/bin/activate
-          pylint src/c21server/*.py tests/c21server/*.py
+          echo Hello World
         '''
       }
     }
