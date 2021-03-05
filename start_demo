@@ -1,0 +1,18 @@
+#!/bin/bash
+
+echo 'Starting Redis in Screen (redis)'
+screen -dm -S redis redis-server
+sleep 1
+echo 'Starting Work Generator in Screen (work_gen)'
+screen -dm -S work_gen .venv/bin/python src/c21server/work_gen/basic_work_gen.py
+sleep 1
+echo 'Starting Work Server in Screen (work_server)'
+screen -dm -S server .venv/bin/python src/c21server/work_server/work_server.py
+sleep 1
+echo 'Starting Client in Screen (client1)'
+screen -dm -S client1 .venv/bin/python src/c21client/client.py
+sleep 1
+echo 'Starging Dashboard in Screen (dashboard)'
+screen -dm -S dashboard .venv/bin/python src/c21server/dashboard/dashboard_server.py
+
+
