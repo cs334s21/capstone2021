@@ -46,6 +46,6 @@ I recommend closing all the terminal windows you have open now, and starting fro
 
 Periodically refresh and see the updates on the dashboard! 
 
-### Part 4
+## Part 3
 To shutdown, simply *control C* in each terminal window. 
 
