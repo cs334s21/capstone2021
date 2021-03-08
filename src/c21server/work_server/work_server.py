@@ -6,6 +6,10 @@ class WorkServer:
     def __init__(self):
         self.app = Flask(__name__)
         self.redis = Redis()
+        
+
+
+
 
 
 def create_server(server=WorkServer()):
@@ -24,7 +28,7 @@ def create_server(server=WorkServer()):
     def get_job():
         keys = server.redis.hkeys("jobs_waiting")
         if len(keys) == 0:
-            return jsonify({"error": "There are no jobs available"}), 400 
+            return jsonify({"error": "There are no jobs available"}), 400
         value = server.redis.hget("jobs_waiting", keys[0])
         server.redis.hdel("jobs_waiting", keys[0])
         return jsonify({keys[0].decode(): value.decode()}), 200
@@ -34,9 +38,17 @@ def create_server(server=WorkServer()):
         data = json.loads(request.data)
         key = get_first_key(data)
         if (key == -1):
-            return '', 400            
+            return '', 400
         print("job_id: %s, value: %s" % (key, data[key]))
         return '', 200
+
+    @server.app.route('/get_client_id', methods=['GET'])
+    def get_client_id():
+        id = server.redis.get('total_num_client_ids')
+        if id is None:
+            id = 0
+        server.redis.incr('total_num_client_ids')
+        return id, 200
 
     return server
 
