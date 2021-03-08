@@ -25,11 +25,11 @@ def handle_error(work_id, work, url):
 
 
 def get_work(url):
-	full_url = f"{url}/get_job"
-	work_id, work = try_to_get_work(full_url)
-	if work_id == "error":
-		work_id, work = handle_error(work_id, work, full_url)
-	return work_id, work
+    full_url = f"{url}/get_job"
+    work_id, work = try_to_get_work(full_url)
+    if work_id == "error":
+        work_id, work = handle_error(work_id, work, full_url)
+    return work_id, work
 
 
 def do_work(work):
@@ -77,7 +77,6 @@ def get_client_id():
     if id == -1:
         print("Could not get client ID!")
     return id
-
 
 if __name__ == "__main__":
     client_id = get_client_id()
