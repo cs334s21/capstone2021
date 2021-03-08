@@ -69,6 +69,7 @@ def request_client_id(url):
     else:
         return -1
 
+
 # Reads from file, or requests if nothing there
 def get_client_id():
     id = read_client_id()
@@ -77,6 +78,7 @@ def get_client_id():
     if id == -1:
         print("Could not get client ID!")
     return id
+
 
 if __name__ == "__main__":
     client_id = get_client_id()
