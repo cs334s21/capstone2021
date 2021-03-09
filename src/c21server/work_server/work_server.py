@@ -54,7 +54,6 @@ def create_server(workserver=WorkServer()):
 
     return workserver
 
-
 if __name__ == '__main__':
     server = create_server()
     server.app.run(host='0.0.0.0', port=8080, debug=False)
