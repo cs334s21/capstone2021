@@ -44,6 +44,14 @@ def create_server(workserver=WorkServer()):
         print("job_id: %s, value: %s" % (key, data[key]))
         return '', 200
 
+    @server.app.route('/get_client_id', methods=['GET'])
+    def get_client_id():
+        id = server.redis.get('total_num_client_ids')
+        if id is None:
+            id = 0
+        server.redis.incr('total_num_client_ids')
+        return id, 200
+
     return workserver
 
 
