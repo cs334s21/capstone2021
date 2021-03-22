@@ -70,8 +70,8 @@ def write_endpoints(endpoint):
 
 def write_all_ids():
     write_endpoints('dockets')
-    # write_endpoints('documents')
-    # write_endpoints('comments')
+    write_endpoints('documents')
+    write_endpoints('comments')
 
 
 if __name__ == "__main__":
