@@ -3,6 +3,8 @@ import time
 from datetime import datetime, timedelta
 import requests
 import dotenv
+import redis
+
 
 dotenv.load_dotenv()
 API_TOKEN = os.getenv('API_TOKEN')
@@ -34,7 +36,7 @@ def update_filter(url, params):
     params["filter[lastModifiedDate][ge]"] = transform_date(response)
 
 
-def write_endpoints(endpoint):
+def write_endpoints(endpoint, database):
     params = {
         "api_key": API_TOKEN,
         "sort": 'lastModifiedDate',
@@ -50,29 +52,30 @@ def write_endpoints(endpoint):
     results = make_request(url, params=params)
     total_elements = int(results.json()['meta']['totalElements'])
 
-    output_number = 0
     while total_elements > 0:
         try:
-            with open(f'{folder_path}/{endpoint}_{output_number}.txt', 'w') \
-                    as writer:
-                print(f"{url[31:]} left to write: {total_elements}")
-                for page in range(1, 21):
-                    params["page[number]"] = str(page)
-                    items = make_request(url, params).json()
-                    for item in items['data']:
-                        writer.write(f"{endpoint}/{item['id']}\n")
-                        total_elements -= 1
-                update_filter(url, params)
-                output_number += 1
+            for page in range(1, 21):
+                params["page[number]"] = str(page)
+                items = make_request(url, params).json()
+                for item in items['data']:
+                    database.sadd("jobs_waiting", f"{endpoint}/{item['id']}\n")
+                    total_elements -= 1
+            update_filter(url, params)
         except IndexError:
             print("ran out of items to download")
 
 
-def write_all_ids():
-    write_endpoints('dockets')
-    write_endpoints('documents')
-    write_endpoints('comments')
+def create_jobs(database):
+    write_endpoints('dockets', database)
+    write_endpoints('documents', database)
+    write_endpoints('comments', database)
 
 
-if __name__ == "__main__":
-    write_all_ids()
+if __name__ == '__main__':
+    redis = redis.Redis()
+    try:
+        redis.ping()
+        print('Successfully connected to redis')
+        create_jobs(redis)
+    except redis.exceptions.ConnectionError as r_con_error:
+        print('Redis connection error:', r_con_error)
