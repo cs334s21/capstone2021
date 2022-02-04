@@ -112,14 +112,14 @@ def check_status_code(response):
 
 def read_client_id(filename):
     try:
-        with open(filename, 'r') as file:
+        with open(filename, 'r', encoding='utf-8') as file:
             return int(file.readline())
     except FileNotFoundError:
         return -1
 
 
 def write_client_id(filename, client_id):
-    with open(filename, 'w') as file:
+    with open(filename, 'w', encoding='utf-8') as file:
         file.write(str(client_id))
 
 
